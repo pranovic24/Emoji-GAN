@@ -47,6 +47,10 @@ class DCGenerator(nn.Module):
         ###########################################
         ##   FILL THIS IN: CREATE ARCHITECTURE   ##
         ###########################################
+        self.deconv1 = deconv(100, 128, 4, padding=0)
+        self.deconv2 = deconv(128, 64, 4)
+        self.deconv3 = deconv(64, 32, 4)
+        self.deconv4 = deconv(32, 3, 4, batch_norm=False)
 
 
     def forward(self, z):
@@ -90,10 +94,15 @@ class CycleGenerator(nn.Module):
         ###########################################
 
         # 1. Define the encoder part of the generator (that extracts features from the input image)
+        self.conv1 = conv(3, 32, 4)
+        self.conv2 = conv(32, 64, 4)
 
         # 2. Define the transformation part of the generator
+        self.resnet_block = ResnetBlock(64)
         
         # 3. Define the decoder part of the generator (that builds up the output image from features)
+        self.deconv1 = deconv(64, 32, 4)
+        self.deconv2 = deconv(32, 3, 4, batch_norm=False)
 
 
     def forward(self, x):
@@ -129,6 +138,10 @@ class DCDiscriminator(nn.Module):
         ###########################################
         ##   FILL THIS IN: CREATE ARCHITECTURE   ##
         ###########################################
+        self.conv1 = conv(3, 32, 4)
+        self.conv2 = conv(32, 64, 4)
+        self.conv3 = conv(64, 128, 4)
+        self.conv4 = conv(128, 1, 4, padding=0, batch_norm=False)
 
     def forward(self, x):
 
